@@ -22,16 +22,14 @@ type BlockingQueueImpl struct {
 	front *Item
 	end *Item
 	size int
-	enqueuelock  sync.RWMutex
-	dequeuelock  sync.RWMutex
+	queueLock  sync.RWMutex
 	empty sync.Cond
 	full sync.Cond
 }
 
 func NewQueue() *BlockingQueueImpl {
 	queue := new(BlockingQueueImpl)
-	queue.enqueuelock = *new(sync.RWMutex)
-	queue.dequeuelock = *new(sync.RWMutex)
+	queue.queueLock = *new(sync.RWMutex)
 	return queue
 }
 
@@ -41,7 +39,7 @@ func (queue *BlockingQueueImpl) Size() int{
 
 func (queue *BlockingQueueImpl) Enqueue(item *Item)  {
 	//  to ensure only 1 can enqueue at one time
-	queue.enqueuelock.Lock()
+	queue.queueLock.Lock()
 	for {
         if queue.size < MAX {
 			break;
@@ -55,13 +53,13 @@ func (queue *BlockingQueueImpl) Enqueue(item *Item)  {
 		queue.front = item
 	}
 	queue.size++
-	queue.enqueuelock.Unlock()
+	queue.queueLock.Unlock()
 }
 
 
 func (queue *BlockingQueueImpl) Dequeue() *Item  {
 	//  to ensure only 1 can dequeue at one time
-	queue.dequeuelock.Lock()
+	queue.queueLock.Lock()
 	for {
         if queue.size > 0 {
 			break
@@ -70,7 +68,7 @@ func (queue *BlockingQueueImpl) Dequeue() *Item  {
 	item := queue.front
 	queue.front = queue.front.next  //  getting a nil pointer at this line sometimes
 	queue.size--
-	defer queue.dequeuelock.Unlock()
+	defer queue.queueLock.Unlock()
 	return item
 }
 
