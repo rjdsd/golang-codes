@@ -4,7 +4,7 @@ package ds
 import (
     "testing"
     "github.com/stretchr/testify/assert"
-    "time"
+    "fmt"
   )
 
 func TestQueue(t *testing.T) {
@@ -25,7 +25,7 @@ func TestQueue(t *testing.T) {
     assert.NotNil(t, queue.Dequeue())
 
     
-    /*
+    
     queue = NewQueue()
     var sum1, sum int
     for i := 0; i < 11; i++ {
@@ -37,22 +37,25 @@ func TestQueue(t *testing.T) {
         sum = sum + (*queue.Dequeue()).value
     }
     assert.Equal(t, sum, sum1, "they should be equal")
-    */
+    
+    
     
     queue = NewQueue()
-    var sum1,sum int
-    for i := 1; i <= 1000; i++ {
+    var sum2,sum3,iter int
+    iter = 1000
+    for i := 1; i <= iter; i++ {
         item := Item{100,nil}
-        sum1 += 100
+        sum2 += 100
         go queue.Enqueue(&item)
     } 
 
     
-    for i := 0; i < 1000; i++ {
-        sum = sum + (*queue.Dequeue()).value
+    for i := 0; i < iter; i++ {
+        sum3 = sum3 + (*queue.Dequeue()).value
 	}  
     
-    assert.Equal(t, sum, sum1, "they should be equal")
-    time.Sleep(2 * time.Second)
-    queue.PrintQueue()
+    assert.Equal(t, sum2, sum3, "they should be equal")
+    fmt.Println("Sum3")
+    fmt.Println(sum3)
+    
 }
