@@ -23,8 +23,6 @@ type BlockingStackImpl struct {
 	front *Item
 	size int
 	stackLock  sync.RWMutex
-	empty sync.Cond
-	full sync.Cond
 }
 
 func NewBlockingStack() *BlockingStackImpl {
