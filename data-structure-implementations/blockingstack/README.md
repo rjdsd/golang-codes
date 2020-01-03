@@ -1,7 +1,7 @@
 # Implementation Of Blocking Stack
 
 * Push operation will Wait if the Stack is Full. 
-* Any Pop operation will Wait if the Stack is Emtry. 
+* Any Pop operation will Wait if the Stack is Empty. 
 * During the wait, system will voluntarily release the locks to ensure Deadlock-Avoidance.
 
 ## Benchmarking
