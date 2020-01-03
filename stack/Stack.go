@@ -1,16 +1,28 @@
-package ds
+/*
+@author Rajdeep Sardar
+This is an implementation of a Stack in Golang. This is non-BLocking.
+*/
+
+package stack
 import "errors"
 import "sync"
 
-type blockingstack interface {
+type Item struct {
+	value int
+	next *Item // link to the next Post
+}
+
+var MAX = 1000
+
+type stack interface {
     Size() int
 	Push(item Item) error
 	Pop() Item
-	NewStack() *BlockingStackImpl
+	NewStack() *StackImpl
 	PrintStack()
 }
 
-type BlockingStackImpl struct {
+type StackImpl struct {
 	front *Item
 	size int
 	stackLock  sync.RWMutex
@@ -18,17 +30,17 @@ type BlockingStackImpl struct {
 	full sync.Cond
 }
 
-func NewStack() *BlockingStackImpl {
-	stack := new(BlockingStackImpl)
+func NewStack() *StackImpl {
+	stack := new(StackImpl)
 	stack.stackLock = *new(sync.RWMutex)
 	return stack
 }
 
-func (stack *BlockingStackImpl) Size() int{
+func (stack *StackImpl) Size() int{
 	return stack.size
 }
 
-func (stack *BlockingStackImpl) push(item *Item) error {
+func (stack *StackImpl) push(item *Item) error {
 	if item == nil {
 		return errors.New("Item is nil")
 	}
@@ -45,7 +57,7 @@ func (stack *BlockingStackImpl) push(item *Item) error {
 }
 
 
-func (stack *BlockingStackImpl) pop() *Item {
+func (stack *StackImpl) pop() *Item {
 	//  ThreadSafety
 	stack.stackLock.Lock()
 	if stack.size == 0 {
@@ -59,7 +71,7 @@ func (stack *BlockingStackImpl) pop() *Item {
 }
 
 
-func (stack *BlockingStackImpl) PrintStackContent()  {
+func (stack *StackImpl) PrintStackContent()  {
 	item := stack.front;
 	for {
         if item == nil {

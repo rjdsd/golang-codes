@@ -1,4 +1,4 @@
-package ds
+package blockingqueue
 
 
 import (
@@ -42,7 +42,7 @@ func TestQueue(t *testing.T) {
     
     queue = NewQueue()
     var sum2,sum3,iter int
-    iter = 1000
+    iter = 50000
     for i := 1; i <= iter; i++ {
         item := Item{100,nil}
         sum2 += 100
@@ -52,10 +52,13 @@ func TestQueue(t *testing.T) {
     
     for i := 0; i < iter; i++ {
         sum3 = sum3 + (*queue.Dequeue()).value
+        fmt.Println("Sum3")
+        fmt.Println(sum3)
+        fmt.Println("Number of Element Dequeued")
+        fmt.Println(i)
 	}  
     
     assert.Equal(t, sum2, sum3, "they should be equal")
-    fmt.Println("Sum3")
-    fmt.Println(sum3)
+
     
 }
