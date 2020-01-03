@@ -24,8 +24,6 @@ type BlockingQueueImpl struct {
 	end *Item
 	size int
 	queueLock  sync.RWMutex
-	empty sync.Cond
-	full sync.Cond
 }
 
 func NewQueue() *BlockingQueueImpl {
