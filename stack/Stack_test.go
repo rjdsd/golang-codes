@@ -1,4 +1,4 @@
-package ds
+package stack
 
 import (
     "github.com/stretchr/testify/assert"

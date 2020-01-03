@@ -1,4 +1,4 @@
-package ds
+package blockingqueue
 import "sync"
 //import "fmt"
 
