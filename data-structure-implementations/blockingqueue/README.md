@@ -1,7 +1,7 @@
 # Implementation Of Blocking Queue
 
 * Enqueue operation will Wait if the Queue is Full. 
-* Any Dequeue operation will Wait, if the Queue is Emtry. 
+* If the Queue is Emtpy, a Dequeue operation will Wait.
 * During the wait, system will voluntarily release the locks to ensure Deadlock-Avoidance.
 
 ## Benchmarking
