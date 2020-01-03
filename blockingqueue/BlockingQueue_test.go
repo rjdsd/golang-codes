@@ -42,7 +42,7 @@ func TestQueue(t *testing.T) {
     
     queue = NewQueue()
     var sum2,sum3,iter int
-    iter = 50000
+    iter = 1000
     for i := 1; i <= iter; i++ {
         item := Item{100,nil}
         sum2 += 100
