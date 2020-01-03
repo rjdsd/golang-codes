@@ -1,5 +1,6 @@
 package ds
 import "sync"
+//import "fmt"
 
 
 var MAX = 1000
@@ -39,11 +40,14 @@ func (queue *BlockingQueueImpl) Size() int{
 
 func (queue *BlockingQueueImpl) Enqueue(item *Item)  {
 	//  to ensure only 1 can enqueue at one time
-	queue.queueLock.Lock()
 	for {
+		queue.queueLock.Lock()
+		//fmt.Println("enque lock")
         if queue.size < MAX {
 			break;
-		} 
+		}
+		//fmt.Println("enque unlock")
+		queue.queueLock.Unlock()
 	}
 	if queue.end != nil {
 		(queue.end).next = item
@@ -53,21 +57,26 @@ func (queue *BlockingQueueImpl) Enqueue(item *Item)  {
 		queue.front = item
 	}
 	queue.size++
+	//fmt.Println("enque unlock")
 	queue.queueLock.Unlock()
 }
 
 
 func (queue *BlockingQueueImpl) Dequeue() *Item  {
 	//  to ensure only 1 can dequeue at one time
-	queue.queueLock.Lock()
 	for {
+		queue.queueLock.Lock()
+		//fmt.Println("deque lock")
         if queue.size > 0 {
 			break
 		}
+		queue.queueLock.Unlock()
+		//fmt.Println("deque unlock")
 	}
 	item := queue.front
 	queue.front = queue.front.next  //  getting a nil pointer at this line sometimes
 	queue.size--
+	//fmt.Println("deque unlock")
 	defer queue.queueLock.Unlock()
 	return item
 }
