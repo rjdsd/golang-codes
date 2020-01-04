@@ -36,7 +36,7 @@ func (stack *BlockingStackImpl) Size() int{
 }
 
 func (stack *BlockingStackImpl) Push(item *Item)  {
-	//  to ensure only 1 can enStack at one time
+	//  ThreadSafety
 	for {
 		stack.stackLock.Lock()
         if stack.size < MAX {
@@ -53,7 +53,7 @@ func (stack *BlockingStackImpl) Push(item *Item)  {
 
 
 func (stack *BlockingStackImpl) Pop() *Item  {
-	//  to ensure only 1 can pop at one time
+	//  ThreadSafety
 	for {
 		stack.stackLock.Lock()
         if stack.size > 0 {
@@ -70,7 +70,6 @@ func (stack *BlockingStackImpl) Pop() *Item  {
 }
 
 func (stack *BlockingStackImpl) PrintStack()  {
-	//  to ensure only 1 can deStack at one time
 	item := stack.front
 	for {
         if item == nil {
