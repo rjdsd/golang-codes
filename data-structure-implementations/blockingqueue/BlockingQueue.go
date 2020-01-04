@@ -37,14 +37,13 @@ func (queue *BlockingQueueImpl) Size() int{
 }
 
 func (queue *BlockingQueueImpl) Enqueue(item *Item)  {
-	//  to ensure only 1 can enqueue at one time
+	//  Ensure thread safety
 	for {
 		queue.queueLock.Lock()
-		//fmt.Println("enque lock")
         if queue.size < MAX {
 			break;
 		}
-		//fmt.Println("enque unlock")
+		//Release lock voluntarily to avoid Deadlock and try to aquire lock again
 		queue.queueLock.Unlock()
 	}
 	if queue.end != nil {
@@ -55,32 +54,28 @@ func (queue *BlockingQueueImpl) Enqueue(item *Item)  {
 		queue.front = item
 	}
 	queue.size++
-	//fmt.Println("enque unlock")
 	queue.queueLock.Unlock()
 }
 
 
 func (queue *BlockingQueueImpl) Dequeue() *Item  {
-	//  to ensure only 1 can dequeue at one time
+	//  Ensure thread safety
 	for {
 		queue.queueLock.Lock()
-		//fmt.Println("deque lock")
         if queue.size > 0 {
 			break
 		}
 		queue.queueLock.Unlock()
-		//fmt.Println("deque unlock")
 	}
 	item := queue.front
-	queue.front = queue.front.next  //  getting a nil pointer at this line sometimes
+	queue.front = queue.front.next
 	queue.size--
-	//fmt.Println("deque unlock")
+	//Release lock voluntarily to avoid Deadlock and try to aquire lock again
 	defer queue.queueLock.Unlock()
 	return item
 }
 
 func (queue *BlockingQueueImpl) PrintQueue()  {
-	//  to ensure only 1 can dequeue at one time
 	item := queue.front
 	for {
         if item == nil {

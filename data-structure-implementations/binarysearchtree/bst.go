@@ -6,8 +6,8 @@ import (
 )
 
 type Item struct {
-	value int // All types satisfy the empty interface, so we can store anything here.
-	left *Item // link to the next Item
+	value int   // all types satisfy the empty interface, so we can store anything here.
+	left *Item  // link to the next Item
 	right *Item // link to the prev Item
 }
 
@@ -29,6 +29,7 @@ type BinarySearchTree struct {
 func NewBST() *BinarySearchTree {
 	bst := new(BinarySearchTree)
 	bst.size = 0
+	bst.rwLock = *new(sync.RWMutex)
 	return bst
 }
 
@@ -36,35 +37,45 @@ func (bst *BinarySearchTree) Size() int{
 	return bst.size
 }
 
-
 func (bst *BinarySearchTree) InsertItem(item *Item) {
+	bst.rwLock.Lock()
 	if bst.root == nil {
 		bst.root = item
+		defer bst.rwLock.Unlock()
 		return
 	} else {
-		cur := bst.root
-		for {
-			if cur == nil {
-				cur = item
-				return
-			} else {
+			cur := bst.root
+			for {
 				if item.value <= cur.value {
-					cur = cur.left
+					if cur.left == nil {
+						cur.left = item
+						defer bst.rwLock.Unlock()
+						return
+					} else {
+						cur = cur.left
+					}	
 				} else {
-					cur = cur.right
+						if cur.right == nil {
+						cur.right = item
+						defer bst.rwLock.Unlock()
+						return
+						} else {
+						cur = cur.right
+						}	
+
 				}
 			}
-		}
 	}
 }
 
-
 func (bst *BinarySearchTree) InorderTraversal() {
+	fmt.Println("===Inorder Traversal===")
 	if bst.root == nil {
 		return
 	} else {
 		doInorderTraversal(bst.root)
 	}
+	fmt.Println("end")
 }
 
 func  doInorderTraversal(cur *Item) {
@@ -72,8 +83,8 @@ func  doInorderTraversal(cur *Item) {
 		return
 	} else {
 		doInorderTraversal(cur.left)
-		fmt.Println(cur)
-		fmt.Println("---")
+		fmt.Print(cur.value)
+		fmt.Print("-->")
 		doInorderTraversal(cur.right)
 	}
 }
@@ -88,6 +99,8 @@ func (bst *BinarySearchTree) LowestCommonAnchestor(item1 *Item, item2 *Item) *It
 
 func  findLCA(cur *Item, item1 *Item, item2 *Item) *Item {
 	if cur == nil {
+		return nil
+	} else if cur.left == nil && cur.right == nil && cur.value != item1.value && cur.value != item2.value {
 		return nil
 	} else if cur.value < item1.value && cur.value < item2.value {
 		return findLCA(cur.right, item1, item2)
