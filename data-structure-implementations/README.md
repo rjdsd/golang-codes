@@ -1,7 +1,11 @@
 # Some DS Codes
 
-## BlockingQueue
+## Binary Search Tree
 
-## BlockingStack
+## Blocking Queue
+
+## Blocking Stack
+
+## Double Linked List
 
 ## Stack
