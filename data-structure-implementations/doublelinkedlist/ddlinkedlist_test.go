@@ -2,12 +2,9 @@ package doublelinkedlist
 
 import (
     "testing"
-    "github.com/stretchr/testify/assert"
 )
 
 func TestList(t *testing.T) {
-    // assert equality
-	assert.Equal(t, 123, 123, "they should be equal")
 	dd := NewDoubleLinkedList()
 	item1 := Item{100,nil,nil}
 	dd.Append(&item1)
@@ -17,5 +14,10 @@ func TestList(t *testing.T) {
 	dd.AddAfterItem(&item1, &item3)
 	item4 := Item{250,nil,nil}
 	dd.AddAfterItem(&item3, &item4)
+	dd.PrintList()
+	dd.DeleteItem(&item2)
+	dd.PrintList()
+	item5 := Item{300.99,nil,nil}
+	dd.DeleteItem(&item5)
 	dd.PrintList()
 }
