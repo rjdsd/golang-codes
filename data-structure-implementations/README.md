@@ -9,3 +9,5 @@
 ## Double Linked List
 
 ## Stack
+
+## Trie or Prefix Tree
