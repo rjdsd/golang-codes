@@ -13,5 +13,5 @@
 
 | Operation# | Time To Complete  |    Comment   
 | -----------| ----------------  | ------------------------|
-|  2000      | 0.003  sec        | 1k Push,  1k Pop         | 
+|  2000      | 0.003  sec        | 1k Push,  1k Pop        | 
 |  20000     | 17.293 sec        | 10k Push, 10k Pop       |     
