@@ -56,11 +56,10 @@ func (trie *TrieNode) SearchIfWordExists(word string) bool {
 	return false;
 }
 
-//  WIP
 //  Return top 5 matching words starting with this pattern
 func (trie *TrieNode) SearchWordsMatchingPattern (pattern string) []string {
 	cur := trie
-	result := make([]string, 1)
+	result := make([]string, 0)
 	for _, c := range pattern {
 		index := (c - 97) % 26
 		if(cur.nodes[index] == nil){
@@ -69,30 +68,29 @@ func (trie *TrieNode) SearchWordsMatchingPattern (pattern string) []string {
 			cur = cur.nodes[index]
 		}
 	}
-	if cur.isEndOfWord {
-		result[0] = pattern
-	}
-	cur.findFirstnChilds(pattern, result, 5)
+	cur.findFirstnChilds(pattern, &result, 5)
+	//fmt.Println(len(result))
+	//fmt.Println(result)
 	return result;
 }
 
-// WiP
-func (t *TrieNode) findFirstnChilds(curStr string, res []string, n int) {
-	if len(res) == n {
+func (t *TrieNode) findFirstnChilds(curStr string, res *[]string, n int) {
+	if len(*res) == n {
 		return
 	}
-	curStr = curStr + string(t.val)
 	if t.isEndOfWord {
-		res = append(res, curStr )
+		*res = append(*res, curStr )
+		fmt.Println(res)
 	}
-	if len(res) == n {
+	if len(*res) == n {
 			return
 	} else {
 			for i := 0; i < alphabet_size; i++ {
 				if t.nodes[i] != nil {
+					curStr = curStr + string(t.nodes[i].val)
 					t.nodes[i].findFirstnChilds(curStr,res,n)
 				}
-				if len(res) == n {
+				if len(*res) == n {
 					return
 				}
 			}  
