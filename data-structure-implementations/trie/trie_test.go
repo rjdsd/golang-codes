@@ -6,10 +6,6 @@ import (
 )
 
 func TestStack(t *testing.T) {
-    // assert equality
-    assert.Equal(t, 123, 123, "they should be equal")
-
-
     trie  := CreateNewTrie();
 	trie.InsertAWord("abc")
     trie.InsertAWord("abcd")
