@@ -1,1 +1,2 @@
-# golang-codes
+### golang-codes
+Coding exercises using Golang
